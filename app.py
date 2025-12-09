@@ -498,25 +498,26 @@ if st.session_state.analyze_clicked and inputs:
                     color = record["state_color"]
                     st.markdown(f"""
                         <div class="history-card" style="margin-bottom:12px; border-left:4px solid {color}; padding:16px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <div style="font-weight:800; font-size:16px; color: {color};">{record['state_name']}</div>
-                                <div style="font-size:14px; color:#555;">{record['timestamp'].strftime('%Y-%m-%d %H:%M')}</div>
-                            </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div style="font-weight:800; font-size:16px; color: {color};">{record['state_name']}</div>
+                            <div style="font-size:14px; color:#555;">{record['timestamp'].strftime('%Y-%m-%d %H:%M')}</div>
+                        </div>
+                        
+                        <div style="margin-top:12px; padding-top:12px; border-top: 1px solid #f0f0f0;">
                             
-                            <div style="margin-top:12px; padding-top:12px; border-top: 1px solid #f0f0f0;">
-                                <div style="margin-bottom:8px;">
-                                    <span style="font-weight:700; color:var(--dark-text);">Goal:</span> 
-                                    <span style="color:#4f4a48;">{record['goal']}</span>
-                                </div>
-                                <div style="margin-bottom:8px;">
-                                    <span style="font-weight:700; color:var(--dark-text);">Insight:</span> 
-                                    <span style="color:#4f4a48;">{record['insight']}</span>
-                                </div>
-                                <div>
-                                    <span style="font-weight:700; color:var(--dark-text);">Focus Action:</span> 
-                                    <span style="color:#4f4a48;">{record['microbreak']}</span>
-                                </div>
-                            </div>
+                            <p style="margin-bottom:8px;">
+                                <span style="font-weight:700; color:var(--dark-text);">Goal:</span> 
+                                <span style="color:#4f4a48; font-weight: 500;">{record['goal']}</span>
+                            </p>
+                            <p style="margin-bottom:8px;">
+                                <span style="font-weight:700; color:var(--dark-text);">Insight:</span> 
+                                <span style="color:#4f4a48; font-weight: 400;">{record['insight']}</span>
+                            </p>
+                            <p style="margin-bottom:0;">
+                                <span style="font-weight:700; color:var(--dark-text);">Focus Action:</span> 
+                                <span style="color:#4f4a48; font-weight: 400;">{record['microbreak']}</span>
+                            </p>
+                        </div>
                         </div>
                     """, unsafe_allow_html=True)
 
