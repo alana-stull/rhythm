@@ -450,6 +450,45 @@ if st.session_state.analyze_clicked and inputs:
                 </div>
             ''', unsafe_allow_html=True)
             
+            # --- 4.1 Store the LLM results in session_state for history ---
+            if "insights_history" not in st.session_state:
+                st.session_state.insights_history = []
+
+            st.session_state.insights_history.append({
+                "timestamp": pd.Timestamp.now(),
+                "state_name": state_name,
+                "state_color": state_info['color'],  # Save color for styling
+                "insight": llm_results.get("insight", ""),
+                "microbreak": llm_results.get("microbreak", ""),
+                "goal": inputs["goal"]
+            })
+
+            # --- 4.2 Display Insights History ---
+            if st.session_state.insights_history:
+                st.markdown("<h2 style='margin-top:32px;'>Past Insights</h2>", unsafe_allow_html=True)
+                
+                # Reverse so newest appear first
+                for i, record in enumerate(reversed(st.session_state.insights_history), 1):
+                    color = record["state_color"]
+                    st.markdown(f"""
+                        <div class="result-card" style="margin-bottom:12px; border-left:4px solid {color}; padding:16px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div style="font-weight:700; font-size:16px;">#{i} - {record['state_name']}</div>
+                                <div style="font-size:14px; color:#555;">{record['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}</div>
+                            </div>
+                            <div style="margin-top:8px; font-size:15px; color:#333;">
+                                <strong>Goal:</strong> {record['goal']}<br>
+                                <strong>Insight:</strong> {record['insight']}<br>
+                                <strong>Focus Action:</strong> {record['microbreak']}
+                            </div>
+                        </div>
+                    """, unsafe_allow_html=True)
+
+            # --- 4.3 Optional: Clear History Button ---
+            if st.button("Clear Insights History", key="clear_history_btn"):
+                st.session_state.insights_history = []
+                st.experimental_rerun()
+
             # Explicit button to return to modify inputs on the main page
             st.markdown('<div class="cta-wrap">', unsafe_allow_html=True)
             if st.button("Start New Analysis", key="new_analysis_btn"):
@@ -464,6 +503,7 @@ if st.session_state.analyze_clicked and inputs:
                 st.session_state.input_expanded = True
                 st.session_state.analyze_clicked = False
                 st.rerun()
+
 
 
 st.markdown("""
