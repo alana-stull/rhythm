@@ -470,32 +470,26 @@ if st.session_state.analyze_clicked and inputs:
                 # Reverse so newest appear first
                 for i, record in enumerate(reversed(st.session_state.insights_history), 1):
                     color = record["state_color"]
-                    timestamp_str = record["timestamp"].strftime('%Y-%m-%d %H:%M')
-                    
                     st.markdown(f"""
-                        <div class="result-card" style="
-                            margin-bottom:16px; 
-                            border-left: 4px solid {color}; 
-                            padding:16px; 
-                            border-radius:12px;
-                            background:#ffffff;
-                            box-shadow:0 2px 6px rgba(0,0,0,0.06);
-                        ">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <div class="result-card" style="margin-bottom:12px; border-left:4px solid {color}; padding:16px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <div style="font-weight:700; font-size:16px;">{record['state_name']}</div>
-                                <div style="font-size:12px; color:#555;">{timestamp_str}</div>
+                                <div style="font-size:14px; color:#555;">{record['timestamp'].strftime('%Y-%m-%d %H:%M')}</div>
                             </div>
-                            <div style="margin-bottom:8px;"><strong>Goal:</strong> {record['goal']}</div>
-                            <div style="margin-bottom:8px;"><strong>Insight:</strong> {record['insight']}</div>
-                            <div><strong>Focus Action:</strong> {record['microbreak']}</div>
+                            <div style="margin-top:8px; padding-bottom:8px; font-size:15px; color:#333;">
+                                <strong>Goal:</strong> {record['goal']}<br>
+                                <strong>Insight:</strong> {record['insight']}<br>
+                                <strong>Focus Action:</strong> {record['microbreak']}
+                            </div>
                         </div>
                     """, unsafe_allow_html=True)
 
             # --- 4.3 Optional: Clear History Button ---
             if st.button("Clear Insights History", key="clear_history_btn"):
                 st.session_state.insights_history = []
+                # Reset the history_updated flag too
+                st.session_state.history_updated = False
                 st.experimental_rerun()
-
 
             # Explicit button to return to modify inputs on the main page
             st.markdown('<div class="cta-wrap">', unsafe_allow_html=True)
