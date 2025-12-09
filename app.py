@@ -490,37 +490,36 @@ if st.session_state.analyze_clicked and inputs:
                 "goal": inputs["goal"]
             })
 
-            # --- 4.2 Display Insights History ---
+            # --- 4.2 ---
             if st.session_state.insights_history:
                 st.markdown("<h2 style='margin-top:32px;'>Past Insights</h2>", unsafe_allow_html=True)
                 
-                # Reverse so newest appear first
-                for i, record in enumerate(reversed(st.session_state.insights_history), 1):
+                for record in reversed(st.session_state.insights_history):
                     color = record["state_color"]
-                    st.markdown(f"""
-                        <div class="history-card" style="margin-bottom:12px; border-left:4px solid {color}; padding:16px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div style="font-weight:800; font-size:16px; color: {color};">{record['state_name']}</div>
-                            <div style="font-size:14px; color:#555;">{record['timestamp'].strftime('%Y-%m-%d %H:%M')}</div>
-                        </div>
-                        
-                        <div style="margin-top:12px; padding-top:12px; border-top: 1px solid #f0f0f0;">
-                            
-                            <p style="margin-bottom:8px;">
-                                <span style="font-weight:700; color:var(--dark-text);">Goal:</span> 
-                                <span style="color:#4f4a48; font-weight: 500;">{record['goal']}</span>
-                            </p>
-                            <p style="margin-bottom:8px;">
-                                <span style="font-weight:700; color:var(--dark-text);">Insight:</span> 
-                                <span style="color:#4f4a48; font-weight: 400;">{record['insight']}</span>
-                            </p>
-                            <p style="margin-bottom:0;">
-                                <span style="font-weight:700; color:var(--dark-text);">Focus Action:</span> 
-                                <span style="color:#4f4a48; font-weight: 400;">{record['microbreak']}</span>
-                            </p>
-                        </div>
-                        </div>
-                    """, unsafe_allow_html=True)
+                    timestamp_str = record["timestamp"].strftime('%Y-%m-%d %H:%M')
+
+                    # Create a container for each history card
+                    with st.container():
+                        st.markdown(f"""
+                            <div style="
+                                margin-bottom:16px; 
+                                border-left:4px solid {color}; 
+                                padding:16px; 
+                                border-radius:12px; 
+                                background:#ffffff;
+                                box-shadow:0 2px 6px rgba(0,0,0,0.06);
+                            ">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                                    <div style="font-weight:800; font-size:16px; color:{color};">{record['state_name']}</div>
+                                    <div style="font-size:12px; color:#555;">{timestamp_str}</div>
+                                </div>
+                            </div>
+                        """, unsafe_allow_html=True)
+
+            # Render LLM content safely
+            st.markdown(f"**Goal:** {record['goal']}")
+            st.markdown(f"**Insight:** {record['insight']}")
+            st.markdown(f"**Focus Action:** {record['microbreak']}")
 
             # --- 4.3 Optional: Clear History Button ---
             if st.button("Clear Insights History", key="clear_history_btn"):
