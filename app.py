@@ -246,21 +246,21 @@ st.markdown(
         padding: 20px;
         display: flex;
         align-items: flex-start;
-    }
-
-    .css-1d391kg input[type="range"] {
-        accent-color: #6C382A;  /* changes both slider fill & handle in modern browsers */
-    }
+    }  
 
     .stButton>button:hover {
-        background-color: #6C382A !important;
-        border-color: #6C382A !important;
+    background-color: #6C382A !important;
+    border-color: #6C382A !important;
     }
 
-    .css-1v3fvcr input,
-    .css-1v3fvcr textarea {
-        border: 1px solid #6C382A !important;
-    }    
+    /* Slider handle & fill */
+    .stSlider>div[role="slider"] {
+        accent-color: #6C382A;  /* modern browsers */
+    }
+
+    /* Optional: slider track on hover (some browsers) */
+    .stSlider>div[role="slider"]:hover {
+        accent-color: #6C382A;
 
     </style>
     """,
