@@ -501,7 +501,19 @@ body {
     color: var(--accent);
     margin-bottom: 22px;
 }
+.stSlider > div[role="slider"] {
+    background: #6C382A !important;  /* slider track */
+}
 
+.stSlider > div[role="slider"]::after {
+    background: #6C382A !important; /* slider handle */
+}
+
+.stButton > button:hover {
+    background-color: #6C382A !important; /* button hover */
+    border-color: #6C382A !important;
+}
+            
 </style>
 """, unsafe_allow_html=True)
 
