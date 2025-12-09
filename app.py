@@ -22,7 +22,7 @@ def load_gemini_key():
 
 try:
     GEMINI_API_KEY = load_gemini_key()
-    genai.configure(api_key=GEMINI_API_KEY)
+    genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
     model = genai.GenerativeModel("gemini-2.5-flash")
 except Exception as e:
     st.error(f"Error loading API Key: {e}")
