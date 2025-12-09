@@ -247,7 +247,33 @@ st.markdown(
         display: flex;
         align-items: flex-start;
     }  
-
+    .history-card {
+        margin-bottom:12px; 
+        padding:16px; 
+        border-radius: 20px;
+        box-shadow: var(--soft-shadow);
+        background: var(--card-bg);
+    }
+    .history-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+    .history-content {
+        margin-top:12px; 
+        padding-top:12px; 
+        border-top: 1px solid #f0f0f0;
+    }
+    .history-label {
+        font-weight: 700;
+        color: var(--dark-text);
+        margin-right: 5px;
+    }
+    .history-text {
+        color: #4f4a48;
+        line-height: 1.4;
+    } 
     """,
     unsafe_allow_html=True,
 )
@@ -471,15 +497,25 @@ if st.session_state.analyze_clicked and inputs:
                 for i, record in enumerate(reversed(st.session_state.insights_history), 1):
                     color = record["state_color"]
                     st.markdown(f"""
-                        <div class="result-card" style="margin-bottom:12px; border-left:4px solid {color}; padding:16px;">
+                        <div class="history-card" style="margin-bottom:12px; border-left:4px solid {color}; padding:16px;">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <div style="font-weight:700; font-size:16px;">{record['state_name']}</div>
+                                <div style="font-weight:800; font-size:16px; color: {color};">{record['state_name']}</div>
                                 <div style="font-size:14px; color:#555;">{record['timestamp'].strftime('%Y-%m-%d %H:%M')}</div>
                             </div>
-                            <div style="margin-top:8px; padding-bottom:8px; font-size:15px; color:#333;">
-                                <strong>Goal:</strong> {record['goal']}<br>
-                                <strong>Insight:</strong> {record['insight']}<br>
-                                <strong>Focus Action:</strong> {record['microbreak']}
+                            
+                            <div style="margin-top:12px; padding-top:12px; border-top: 1px solid #f0f0f0;">
+                                <div style="margin-bottom:8px;">
+                                    <span style="font-weight:700; color:var(--dark-text);">Goal:</span> 
+                                    <span style="color:#4f4a48;">{record['goal']}</span>
+                                </div>
+                                <div style="margin-bottom:8px;">
+                                    <span style="font-weight:700; color:var(--dark-text);">Insight:</span> 
+                                    <span style="color:#4f4a48;">{record['insight']}</span>
+                                </div>
+                                <div>
+                                    <span style="font-weight:700; color:var(--dark-text);">Focus Action:</span> 
+                                    <span style="color:#4f4a48;">{record['microbreak']}</span>
+                                </div>
                             </div>
                         </div>
                     """, unsafe_allow_html=True)
