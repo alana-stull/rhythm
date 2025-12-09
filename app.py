@@ -284,6 +284,30 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+    /* Force all input widgets to have white backgrounds */
+    div[data-baseweb="input"] > div > input,
+    div[data-baseweb="input"] > div > textarea,
+    div[data-baseweb="slider"] input,
+    div[data-baseweb="slider"] > div {
+        background-color: #ffffff !important;
+        border-radius: 16px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e8e6e1 !important;
+        padding: 10px !important;
+    }
+
+    /* Optional: remove grey background behind the widget container */
+    div[data-baseweb="input"], div[data-baseweb="slider"] {
+        background-color: #ffffff !important;
+        padding: 6px !important;
+        border-radius: 16px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
 # --- Centered Title and Subtitle (Hero) ---
 st.markdown(
     """
