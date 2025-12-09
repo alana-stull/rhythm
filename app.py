@@ -261,7 +261,8 @@ st.markdown(
     /* Optional: slider track on hover (some browsers) */
     .stSlider>div[role="slider"]:hover {
         accent-color: #6C382A;
-
+    }
+    
     </style>
     """,
     unsafe_allow_html=True,
