@@ -252,6 +252,37 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown("""
+    <style>
+    /* --- Make all input widgets pure white --- */
+    .stNumberInput, .stTextArea, .stSlider, .stTextInput {
+        background-color: #ffffff !important;
+        border-radius: 16px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e8e6e1 !important;
+        padding: 12px !important;
+    }
+    .stNumberInput>div>input,
+    .stTextArea>div>textarea,
+    .stTextInput>div>input {
+        background-color: #ffffff !important;
+        border-radius: 16px !important;
+    }
+    .stSlider>div[role="slider"] {
+        accent-color: #8a7d68 !important;
+        background: #ffffff !important;
+    }
+    .stNumberInput>div, 
+    .stTextArea>div, 
+    .stSlider>div, 
+    .stTextInput>div {
+        background-color: #ffffff !important;
+    }
+    .stNumberInput, .stTextArea, .stSlider, .stTextInput {
+        margin-bottom: 12px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # --- Centered Title and Subtitle (Hero) ---
 st.markdown(
