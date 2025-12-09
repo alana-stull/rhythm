@@ -160,6 +160,7 @@ st.markdown(
         --card-bg: #ffffff;
         --muted: #7a726c;
         --accent: #262626;
+        --dark-text: #262626;
         --soft-shadow: 0 6px 14px rgba(34,34,34,0.06);
         --card-radius: 16px;
         --container-width: 900px;
