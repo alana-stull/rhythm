@@ -487,8 +487,6 @@ if st.session_state.analyze_clicked and inputs:
             # --- 4.3 Optional: Clear History Button ---
             if st.button("Clear Insights History", key="clear_history_btn"):
                 st.session_state.insights_history = []
-                # Reset the history_updated flag too
-                st.session_state.history_updated = False
                 st.experimental_rerun()
 
             # Explicit button to return to modify inputs on the main page
