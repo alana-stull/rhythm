@@ -151,34 +151,29 @@ def render_input_ui():
 st.set_page_config(page_title="Rhythm Dashboard", layout="centered")
 
 # --- Load Figtree font & core CSS (Figma styling) ---
-# --- Global CSS Styling ---
 st.markdown(
     """
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-    :root {
+    :root{
         --bg: #faf9f7;
         --card-bg: #ffffff;
-        --accent: #262626;
         --muted: #7a726c;
+        --accent: #262626;
         --soft-shadow: 0 6px 14px rgba(34,34,34,0.06);
         --card-radius: 16px;
         --container-width: 900px;
     }
-
     html, body, .stApp {
         background: var(--bg);
         font-family: 'Figtree', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-
     .main .block-container {
         max-width: var(--container-width) !important;
         padding-left: 2rem;
         padding-right: 2rem;
-        padding-top: 2rem;
+        padding-top: 2rem; 
     }
-
-    /* --- Hero Section --- */
     .hero {
         text-align: center;
         margin-bottom: 36px;
@@ -197,89 +192,67 @@ st.markdown(
         font-weight: 600;
     }
 
-    /* --- Cards & Layout --- */
-    .metric-card, .productivity-card, .goal-card, .result-card {
+    .metric-card {
         background: var(--card-bg);
         border-radius: var(--card-radius);
-        border: 1px solid #e8e6e1;
+        border: #e8e6e1;
+        box-shadow: var(--soft-shadow);
+        padding: 20px;
+        min-height: 140px; 
+    }
+    .metric-label { 
+        font-weight: 600; 
+        margin-bottom: 12px; 
+    }
+    .productivity-card {
+        background: var(--card-bg);
+        border-radius: var(--card-radius);
+        border: #e8e6e1;
         box-shadow: var(--soft-shadow);
         padding: 20px;
         margin-top: 20px;
     }
-
-    .metric-label {
-        font-weight: 600;
-        margin-bottom: 12px;
-        color: var(--accent);
-    }
-
     .productivity-header {
         display: flex;
         justify-content: space-between;     
         align-items: center;
         margin-bottom: 12px;
     }
-
+    .goal-card {
+        background: var(--card-bg);
+        border-radius: var(--card-radius);
+        border: #e8e6e1;
+        box-shadow: var(--soft-shadow);
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .cta-wrap {
+        display: flex;
+        justify-content: center;
+        margin-top: 24px;
+        margin-bottom: 40px;
+    }
     .cards-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
         margin-top: 20px;
     }
-
-    .result-card h3 {
-        margin-top: 0;
-        margin-bottom: 8px;
-        color: var(--accent);
-    }
-
-    .result-card p {
-        margin: 0;
-        color: var(--muted);
-    }
-
-    /* --- Buttons --- */
-    .stButton > button {
-        border-radius: 12px !important;
-        padding: 8px 24px !important;
-        font-weight: 700 !important;
-        background: var(--accent) !important;
-        color: white !important;
-    }
-    .stButton>button:hover {
-        background-color: #6C382A !important;
-        border-color: #6C382A !important;
-    }
-
-    /* --- Inputs / Sliders / TextAreas --- */
-    .stNumberInput > div > input,
-    .stSlider > div[role="slider"],
-    .stTextArea > div > textarea {
-        background: var(--card-bg) !important;
-        border-radius: var(--card-radius) !important;
-        padding: 12px !important;
-        box-shadow: var(--soft-shadow) !important;
-        border: 1px solid #e8e6e1 !important;
-    }
-
-    .stNumberInput > label,
-    .stSlider > label,
-    .stTextArea > label {
-        font-weight: 600 !important;
-        color: var(--accent) !important;
-        margin-bottom: 6px !important;
-    }
-
-    /* --- Slider color --- */
-    .stSlider>div[role="slider"] {
-        accent-color: #6C382A;
-        margin-top: 8px !important;
-    }
+    .result-card {
+        background: var(--card-bg);
+        border-radius: var(--card-radius);
+        border: #e8e6e1;
+        box-shadow: var(--soft-shadow);
+        padding: 20px;
+        display: flex;
+        align-items: flex-start;
+    }  
 
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
+
 
 # --- Centered Title and Subtitle (Hero) ---
 st.markdown(
