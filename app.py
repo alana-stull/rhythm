@@ -248,23 +248,20 @@ st.markdown(
         align-items: flex-start;
     }
 
-    /* Slider track */
     .css-1d391kg input[type="range"] {
         accent-color: #6C382A;  /* changes both slider fill & handle in modern browsers */
     }
 
-    /* Button hover */
     .stButton>button:hover {
         background-color: #6C382A !important;
         border-color: #6C382A !important;
     }
 
-    /* Number input & text area */
     .css-1v3fvcr input,
     .css-1v3fvcr textarea {
         border: 1px solid #6C382A !important;
     }    
-    
+
     </style>
     """,
     unsafe_allow_html=True,
@@ -518,18 +515,6 @@ body {
     font-size: 16px;
     color: var(--accent);
     margin-bottom: 22px;
-}
-.stSlider > div[role="slider"] {
-    background: #6C382A !important;  /* slider track */
-}
-
-.stSlider > div[role="slider"]::after {
-    background: #6C382A !important; /* slider handle */
-}
-
-.stButton > button:hover {
-    background-color: #6C382A !important; /* button hover */
-    border-color: #6C382A !important;
 }
             
 </style>
