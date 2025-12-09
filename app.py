@@ -473,10 +473,10 @@ if st.session_state.analyze_clicked and inputs:
                     st.markdown(f"""
                         <div class="result-card" style="margin-bottom:12px; border-left:4px solid {color}; padding:16px;">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <div style="font-weight:700; font-size:16px;">#{i} - {record['state_name']}</div>
-                                <div style="font-size:14px; color:#555;">{record['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}</div>
+                                <div style="font-weight:700; font-size:16px;">#{record['state_name']}</div>
+                                <div style="font-size:14px; color:#555;">{record['timestamp'].strftime('%Y-%m-%d %H:%M')}</div>
                             </div>
-                            <div style="margin-top:8px; font-size:15px; color:#333;">
+                            <div style="margin-top:8px; padding-bottom:8px; font-size:15px; color:#333;">
                                 <strong>Goal:</strong> {record['goal']}<br>
                                 <strong>Insight:</strong> {record['insight']}<br>
                                 <strong>Focus Action:</strong> {record['microbreak']}
