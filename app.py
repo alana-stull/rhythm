@@ -5,13 +5,11 @@ import os
 import json
 import google.generativeai as genai
 from google.generativeai import types
-from rhythm_mapping import classify_rhythm_state # Import the classification logic
+from rhythm_mapping import classify_rhythm_state
 
-# --- 1. LLM Setup ---
 def load_gemini_key():
     """Tries to load the API key from st.secrets, raising a clear error if missing."""
     try:
-        # Standard Streamlit location (preferred)
         return st.secrets["GEMINI_API_KEY"]
     except KeyError:
         key = os.environ.get("GEMINI_API_KEY")
@@ -27,10 +25,9 @@ try:
 except Exception as e:
     st.error(f"Error loading API Key: {e}")
     st.stop()
-# --- End LLM Setup ---
 
 
-# --- 2. Define the Rhythm States and Theme (for display purposes) ---
+# all rhythm states and their meanings
 RHYTHM_STATES = {
     "Flow State": {"productivity": "High", "screen_time": "Low", "sleep": "High", "color": "#00A39C", "icon": "⚡"},
     "Digital Drift State": {"productivity": "Medium", "screen_time": "High", "sleep": "Medium", "color": "#8058a5", "icon": "🌀"},
@@ -40,7 +37,7 @@ RHYTHM_STATES = {
     "Unknown State": {"productivity": "N/A", "screen_time": "N/A", "sleep": "N/A", "color": "gray", "icon": "❓"},
 }
 
-# --- 3. Gemini Prompt Generation ---
+# gemini prompt generation
 def generate_llm_prompt(state_name, user_data):
     """Creates a detailed prompt for the Gemini LLM."""
     
@@ -69,10 +66,7 @@ def generate_llm_prompt(state_name, user_data):
     """
     return prompt
 
-# --- 4. Helper: Render the Input UI section (Matching Figma) ---
 def render_input_ui():
-    
-    # Ensure session state variables for inputs exist
     if "sleep_input" not in st.session_state:
         st.session_state["sleep_input"] = 7.0
     if "screen_time_input" not in st.session_state:
@@ -82,10 +76,10 @@ def render_input_ui():
     if "goal_text" not in st.session_state:
         st.session_state["goal_text"] = "Finish presentation deck"
     
-    # --- 2-Column Layout for Metrics ---
+    # columns for sleep + screen time
     col1, col2 = st.columns(2)
 
-    # Metric 1: Sleep
+    # sleep
     with col1:
         st.markdown('<div class="metric-label">Sleep Hours</div>', unsafe_allow_html=True)
         st.session_state["sleep_input"] = st.number_input(
@@ -96,7 +90,7 @@ def render_input_ui():
         )
         st.markdown('</div>', unsafe_allow_html=True)
         
-    # Metric 2: Screen Time
+    # screen time
     with col2:
         st.markdown('<div class="metric-label">Screen Time</div>', unsafe_allow_html=True)
         st.session_state["screen_time_input"] = st.number_input(
@@ -107,7 +101,7 @@ def render_input_ui():
         )
         st.markdown('</div>', unsafe_allow_html=True)
     
-    # --- Productivity Score Slider (Full Width below the row) ---
+    # productivity score slider
     st.markdown('<div class="productivity-header">', unsafe_allow_html=True)
     st.markdown('<div class="metric-label">How productive do you feel now?</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
@@ -119,7 +113,7 @@ def render_input_ui():
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- Goal Card (Text Area) ---
+    # goal text area
     st.markdown('<div style="font-weight:700; color:#262626; margin-bottom:12px;">Today\'s Key Goal / Focus</div>', unsafe_allow_html=True)
     
     st.session_state["goal_text"] = st.text_area(
@@ -132,9 +126,9 @@ def render_input_ui():
     )
     st.markdown('</div>', unsafe_allow_html=True) # close goal-card
     
-    # --- CTA Button ---
+    # analyze rhythm button
     st.markdown('<div class="cta-wrap">', unsafe_allow_html=True)
-    analyze_clicked = st.button("analyze rhythm", key="analyze_btn")
+    analyze_clicked = st.button("Analyze Rhythm", key="analyze_btn")
     st.markdown('</div>', unsafe_allow_html=True)
 
     return {
@@ -146,11 +140,10 @@ def render_input_ui():
     }
 
 
-# --- 5. Main Application Flow ---
-
+# main app
 st.set_page_config(page_title="Rhythm Dashboard", layout="centered")
 
-# --- Load Figtree font & core CSS (Figma styling) ---
+# main styling
 st.markdown(
     """
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -311,7 +304,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Centered Title and Subtitle (Hero) ---
 st.markdown(
     """
     <div class="hero">
@@ -321,63 +313,56 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-# --- End Centered Title ---
 
-# Initialize analysis state
 if 'analyze_clicked' not in st.session_state:
     st.session_state.analyze_clicked = False
 if 'input_expanded' not in st.session_state:
     st.session_state.input_expanded = True 
 
-# Use a main container for the inputs so we can selectively hide/show it
 if st.session_state.analyze_clicked and not st.session_state.input_expanded:
-    # If analysis has run AND inputs are collapsed, create an expander for the inputs
-    with st.expander("Show/Modify Inputs"):
+    # change inputs
+    with st.expander("Modify Inputs"):
         inputs_container = st.container()
         with inputs_container:
             inputs = render_input_ui()
-            # If the analyze button is clicked from inside the expander, re-run analysis
+            
             if inputs["analyze_clicked"]:
                 st.session_state.user_inputs = inputs
                 st.session_state.analyze_clicked = True
                 st.session_state.input_expanded = False
                 st.rerun() 
-            # Button to un-collapse the main input view
+            
             if st.button("Un-Collapse Inputs to Main View", key="uncollapse_btn"):
                 st.session_state.input_expanded = True
                 st.session_state.analyze_clicked = False
                 st.rerun()
                 
-    # Use the stored inputs for analysis
     inputs = st.session_state.get("user_inputs", {})
     
 else:
-    # Input section is fully visible
     inputs_container = st.container()
     with inputs_container:
         inputs = render_input_ui()
         
-        # If Analyze is clicked, store inputs and change state
         if inputs["analyze_clicked"]:
             st.session_state.user_inputs = inputs
             st.session_state.analyze_clicked = True
             st.session_state.input_expanded = False 
             st.rerun() 
 
-# --- Analysis & Results Logic (Only runs if a valid analysis has been triggered) ---
-
+# analyze and show results
 if st.session_state.analyze_clicked and inputs:
     
     sleep_hours = inputs['sleep_hours']
     screen_time = inputs['screen_time']
     productivity_score = inputs['productivity_score']
     
-    # Step 1: Classify User State using ML Logic
+    # classify rhythm state
     state_name = classify_rhythm_state(sleep_hours, screen_time, productivity_score)
     
     if "Error" in state_name or state_name == "Unknown State":
         st.error(f"ML Classification Error: State could not be determined. Result: {state_name}")
-        # Offer button to show inputs again
+        
         if st.button("Modify Inputs", key="error_modify_btn"):
             st.session_state.input_expanded = True
             st.session_state.analyze_clicked = False
@@ -387,10 +372,10 @@ if st.session_state.analyze_clicked and inputs:
     state_info = RHYTHM_STATES[state_name]
     state_color = state_info['color']
     
-    # Step 2: Generate LLM Prompt
+    # generate LLM prompt
     llm_prompt = generate_llm_prompt(state_name, inputs)
 
-    # Step 3: Call Gemini API
+    # gemini api
     st.markdown(
         f"""
         <div class="results-hero">
@@ -419,10 +404,8 @@ if st.session_state.analyze_clicked and inputs:
         )
             
             llm_results = json.loads(response.text)
-            
-            # --- START RESULTS LAYOUT (Matching Figma Mockup) ---
-            
-            # 1. Status Bar (Full Width Card - Top)
+                        
+            # status bar
             st.markdown(f'''
                 <div class="productivity-card" style="margin-top:8px; border-left: 4px solid {state_color};">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -432,10 +415,10 @@ if st.session_state.analyze_clicked and inputs:
                 </div>
             ''', unsafe_allow_html=True)
             
-            # 2. ROW 1: Insight and Microbreak (2-column grid)
+            # insight + break
             st.markdown('<div class="cards-grid">', unsafe_allow_html=True)
 
-            # Card A: LLM Insight
+            # gemini insight
             st.markdown(f'''
                 <div class="result-card">
                     <div class="result-icon" style="background:{state_color}1A; color:{state_color};"></div>
@@ -446,7 +429,7 @@ if st.session_state.analyze_clicked and inputs:
                 </div>
             ''', unsafe_allow_html=True)
 
-            # Card B: Microbreak
+            # microbreak
             st.markdown(f'''
                 <div class="result-card" style="margin-top:20px;">
                     <div class="result-icon" style="background:{state_color}1A; color:{state_color};"></div>
@@ -457,9 +440,9 @@ if st.session_state.analyze_clicked and inputs:
                 </div>
             ''', unsafe_allow_html=True)
             
-            st.markdown('</div>', unsafe_allow_html=True) # close cards-grid
+            st.markdown('</div>', unsafe_allow_html=True)
 
-            # 3. Inputs for transparency (Full width card - Bottom)
+            # inputs for transparency section
             st.markdown(f'''
                 <div class="productivity-card" style="margin-top:20px; padding:20px;">
                     <div style="font-weight:700; color:var(--accent); margin-bottom:8px;">Inputs for Transparency</div>
@@ -477,20 +460,20 @@ if st.session_state.analyze_clicked and inputs:
                 </div>
             ''', unsafe_allow_html=True)
             
-            # --- 4.1 Store the LLM results in session_state for history ---
+            # store history 
             if "insights_history" not in st.session_state:
                 st.session_state.insights_history = []
 
             st.session_state.insights_history.append({
                 "timestamp": pd.Timestamp.now(),
                 "state_name": state_name,
-                "state_color": state_info['color'],  # Save color for styling
+                "state_color": state_info['color'],
                 "insight": llm_results.get("insight", ""),
                 "microbreak": llm_results.get("microbreak", ""),
                 "goal": inputs["goal"]
             })
 
-            # --- 4.2 ---
+            # past insight card
             if st.session_state.insights_history:
                 st.markdown("<h2 style='margin-top:32px;'>Past Insights</h2>", unsafe_allow_html=True)
 
@@ -498,7 +481,6 @@ if st.session_state.analyze_clicked and inputs:
                     color = record["state_color"]
                     timestamp_str = record["timestamp"].strftime('%Y-%m-%d %H:%M')
 
-                    # Escape HTML characters in LLM text
                     insight_safe = record['insight'].replace('<', '&lt;').replace('>', '&gt;')
                     microbreak_safe = record['microbreak'].replace('<', '&lt;').replace('>', '&gt;')
                     goal_safe = record['goal'].replace('<', '&lt;').replace('>', '&gt;')
@@ -524,7 +506,7 @@ if st.session_state.analyze_clicked and inputs:
                     </div>
                     """, unsafe_allow_html=True)
 
-            # Explicit button to return to modify inputs on the main page
+            # new analysis button
             st.markdown('<div class="cta-wrap">', unsafe_allow_html=True)
             if st.button("Start New Analysis", key="new_analysis_btn"):
                 st.session_state.input_expanded = True
@@ -540,7 +522,7 @@ if st.session_state.analyze_clicked and inputs:
                 st.rerun()
 
 
-
+# more styling
 st.markdown("""
 <style>
 
