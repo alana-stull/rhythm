@@ -524,11 +524,6 @@ if st.session_state.analyze_clicked and inputs:
                     </div>
                     """, unsafe_allow_html=True)
 
-            # Render LLM content safely
-            st.markdown(f"**Goal:** {record['goal']}")
-            st.markdown(f"**Insight:** {record['insight']}")
-            st.markdown(f"**Focus Action:** {record['microbreak']}")
-
             # --- 4.3 Optional: Clear History Button ---
             if st.button("Clear Insights History", key="clear_history_btn"):
                 st.session_state.insights_history = []
