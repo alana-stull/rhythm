@@ -493,28 +493,36 @@ if st.session_state.analyze_clicked and inputs:
             # --- 4.2 ---
             if st.session_state.insights_history:
                 st.markdown("<h2 style='margin-top:32px;'>Past Insights</h2>", unsafe_allow_html=True)
-                
+
                 for record in reversed(st.session_state.insights_history):
                     color = record["state_color"]
                     timestamp_str = record["timestamp"].strftime('%Y-%m-%d %H:%M')
 
-                    # Create a container for each history card
-                    with st.container():
-                        st.markdown(f"""
-                            <div style="
-                                margin-bottom:16px; 
-                                border-left:4px solid {color}; 
-                                padding:16px; 
-                                border-radius:12px; 
-                                background:#ffffff;
-                                box-shadow:0 2px 6px rgba(0,0,0,0.06);
-                            ">
-                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                                    <div style="font-weight:800; font-size:16px; color:{color};">{record['state_name']}</div>
-                                    <div style="font-size:12px; color:#555;">{timestamp_str}</div>
-                                </div>
-                            </div>
-                        """, unsafe_allow_html=True)
+                    # Escape HTML characters in LLM text
+                    insight_safe = record['insight'].replace('<', '&lt;').replace('>', '&gt;')
+                    microbreak_safe = record['microbreak'].replace('<', '&lt;').replace('>', '&gt;')
+                    goal_safe = record['goal'].replace('<', '&lt;').replace('>', '&gt;')
+
+                    st.markdown(f"""
+                    <div class="history-card" style="
+                        margin-bottom:16px; 
+                        border-left:4px solid {color}; 
+                        padding:16px; 
+                        border-radius:12px; 
+                        background:#ffffff;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.06);
+                    ">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                            <div style="font-weight:800; font-size:16px; color:{color};">{record['state_name']}</div>
+                            <div style="font-size:12px; color:#555;">{timestamp_str}</div>
+                        </div>
+                        <div style="margin-top:8px; line-height:1.5;">
+                            <p style="margin-bottom:8px;"><strong>Goal:</strong> {goal_safe}</p>
+                            <p style="margin-bottom:8px;"><strong>Insight:</strong> {insight_safe}</p>
+                            <p style="margin-bottom:0;"><strong>Focus Action:</strong> {microbreak_safe}</p>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
             # Render LLM content safely
             st.markdown(f"**Goal:** {record['goal']}")
