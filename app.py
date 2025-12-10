@@ -525,9 +525,9 @@ if st.session_state.analyze_clicked and inputs:
                     """, unsafe_allow_html=True)
 
             # --- 4.3 Optional: Clear History Button ---
-            if st.button("Clear Insights History", key="clear_history_btn"):
+            clear_clicked = st.button("Clear Insights History", key="clear_history_btn")
+            if clear_clicked:
                 st.session_state.insights_history = []
-                st.experimental_rerun()
 
             # Explicit button to return to modify inputs on the main page
             st.markdown('<div class="cta-wrap">', unsafe_allow_html=True)
